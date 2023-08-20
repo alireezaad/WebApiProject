@@ -9,6 +9,6 @@ namespace WebApi.Model.DBContext
         {
 
         }
-        public DbSet<Twitt> twitts { get; set; }
+        public virtual DbSet<User> users { get; set; }
     }
 }
