@@ -1,4 +1,4 @@
-﻿// #define Disable_Ctor
+﻿//#define Disable_Ctor
 
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -45,15 +45,17 @@ namespace WebApi.Services
         {
             try
             {
-                var UserResponse = await this.client.GetAsync(_config.Endpoint);
-                if (UserResponse.StatusCode == System.Net.HttpStatusCode.NotFound)
-                    return new List<User>();
+                //var UserResponse = await this.client.GetAsync(_config.Endpoint);
+                //if (UserResponse.StatusCode == System.Net.HttpStatusCode.NotFound)
+                //    return new List<User>();
 
-                //var myTask = Task.Run(() => db.users.ToListAsync());
-                //return await myTask
-                var content = UserResponse.Content;
-                var list = await content.ReadFromJsonAsync<List<User>>();
-                return list.ToList();
+                //var content = UserResponse.Content;
+                //var list = await content.ReadFromJsonAsync<List<User>>();
+                //return list.ToList();
+
+                var myTask = Task.Run(() => db.users.ToListAsync());
+                return await myTask;
+
             }
             catch (Exception) { throw; }
         }

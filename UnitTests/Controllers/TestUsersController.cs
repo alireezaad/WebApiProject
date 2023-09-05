@@ -21,7 +21,7 @@ using WebApi.Model.DBContext;
 using WebApi.Services;
 using Xunit;
 using static System.Net.WebRequestMethods;
-
+using FakeItEasy;
 namespace UnitTests.Controllers
 {
     public class TestUsersController
@@ -30,8 +30,14 @@ namespace UnitTests.Controllers
         public async void Get_OnSuccessReturnStatusCode200()
         {
             //arrange 
-            var moq = new Mock<IUserServices>();
-            var controller = new UsersController(moq.Object);
+            //var moq = new Mock<IUserServices>();
+            //var lictMoq = new Mock<IEnumerable<User>>();
+            //moq.Setup(x => x.GetAll()).ReturnsAsync(lictMoq.Object);
+
+            var serviceMock = A.Fake<IUserServices>();
+            var outputMock = A.Fake<List<User>>();
+            A.CallTo(() => serviceMock.GetAll()).Returns(outputMock);
+            var controller = new UsersController(serviceMock);
 
             //act 
             var result = (OkObjectResult)await controller.GetAll();
@@ -40,7 +46,7 @@ namespace UnitTests.Controllers
 
             // assert 
             result.StatusCode.Should().Be(200);
-
+            result.Value.Should().BeOfType<List<User>>();
             //result.Value.Should().Be(new List<Twitt>());
             //Assert.IsType<List<User>>(listT);
             //Assert.Equal(new List<User>(), listT);
@@ -59,7 +65,7 @@ namespace UnitTests.Controllers
 
             //assert
             moq.Verify(service => service.GetAll(),
-                Times.Once()
+                Moq.Times.Once()
                 );
 
             //result.StatusCode.Should().Be(200);
